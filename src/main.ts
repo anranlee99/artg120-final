@@ -9,11 +9,16 @@ class TestScene extends Phaser.Scene {
         super('test');
 
         this.synth = new Tone.Synth().toDestination()
+        this.synth.sync()
+        this.synth.triggerAttackRelease("C4", "8n", 0)
+        this.synth.triggerAttackRelease("E4", "8n", "64n")
+        this.synth.triggerAttackRelease("G4", "8n", "32n")
     }
 
     create() {
         this.input.on(Phaser.Input.Events.POINTER_DOWN, () => {
-            this.synth.triggerAttackRelease("C4", "8n")
+            Tone.Transport.stop()
+            Tone.Transport.start()
         })
     }
 }
