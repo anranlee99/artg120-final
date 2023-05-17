@@ -4,6 +4,7 @@ import * as Tone from 'tone';
 class TestScene extends Phaser.Scene {
     synth: Tone.Synth
 
+    // gaming
     constructor() {
         super('test');
 
