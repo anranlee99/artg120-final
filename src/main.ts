@@ -14,8 +14,10 @@ class TestScene extends Phaser.Scene {
         this.synth.triggerAttackRelease("E4", "8n", "64n")
         this.synth.triggerAttackRelease("G4", "8n", "32n")
     }
+
     // gaming++
     create() {
+        this.sound.on(Phaser.Sound.Events.UNLOCKED, () => Tone.start())
         this.input.on(Phaser.Input.Events.POINTER_DOWN, () => {
             Tone.Transport.stop()
             Tone.Transport.start()
