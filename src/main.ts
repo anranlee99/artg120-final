@@ -60,25 +60,31 @@ class TestScene extends Phaser.Scene {
         this.setUp()
 
         const graphics = this.add.graphics()
-        graphics.fillStyle(0x000000, 1)
-        // let tool = this.add.text(this.w*0.9, this.h*0.2, "🥁", {
-        //     fontSize: 100
-        // }).setOrigin(0.5)
-        // let tool2 = this.add.text(this.w*0.9, this.h*0.2, "🥁", {
-        //     fontSize: 100
-        // }).setOrigin(0.5)
-        // let toolBG = graphics.fillRoundedRect(tool.x - tool.displayWidth, tool.y - tool.displayHeight,  200,200, 32)
-        // this.toolContainer = this.add.container(tool.x, tool.y, [tool, tool2])
-        // doesn't work. would if i just used a rectangle but i want to use the rounded one T_T
-        //let toolSprite = this.physics.add.existing(toolBG)
-        // this.input.setDraggable(toolSprite.setInteractive())
-        
+        graphics.fillStyle(0x00aaff, 1)
+        let iconRect = this.add.rectangle(this.w*0.9, this.h*0.2, 200, 200).setOrigin(0.5) 
+        let tool = this.add.text(iconRect.x, iconRect.y, "🥁", {
+            fontSize: 100
+        }).setOrigin(0.5)
+        let mask = graphics.fillRoundedRect(0, 0,  200,200, 32)//.setDepth(iconRect.depth + 1)
+        mask.copyPosition({
+            x: iconRect.x - iconRect.width / 2,
+            y: iconRect.y - iconRect.height / 2
+        })
+        iconRect.createGeometryMask(mask)
+        iconRect.setInteractive({  useHandCursor: true,draggable: true })
+        iconRect.on(Phaser.Input.Events.DRAG, (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
+
+            iconRect.x = dragX
+            iconRect.y = dragY
+            tool.x = dragX
+            tool.y = dragY
+            mask.copyPosition({
+                x: iconRect.x - iconRect.width / 2,
+                y: iconRect.y - iconRect.height / 2
+            })
+        })
     }
     update() {
-        // this.toolContainer.children.forEach((child) => {
-        //     child.x = this.toolContainer.x
-        //     child.y = this.toolContainer.y
-        // })
     }
 }
 
@@ -89,12 +95,6 @@ let game = new Phaser.Game({
         autoCenter: Phaser.Scale.CENTER_BOTH,
         width: 1920,
         height: 1080
-    },
-    physics: {
-        default: 'arcade',
-        arcade: {
-            debug: true,
-        }
     },
     backgroundColor: '#cccccc',
     parent: 'app',
