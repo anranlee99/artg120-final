@@ -12,7 +12,7 @@ class TestScene extends Phaser.Scene {
         super('test');
 
         this.synth = new Tone.Synth().toDestination()
-
+        this.synth.sync()
     }
     makeTrack() {
         this.add.rectangle(0, this.h * 0.2, this.w * 0.8, this.h * 0.2, 0xabcdef).setOrigin(0).setStrokeStyle(5, 0)
@@ -24,6 +24,7 @@ class TestScene extends Phaser.Scene {
         this.w = this.game.config.width as number
         this.h = this.game.config.height as number
         this.makeTrack()
+        this.sound.on(Phaser.Sound.Events.UNLOCKED, () => Tone.start())
 
         this.playBtn = this.add.triangle(this.w * 0.3, this.h * 0.1, 0, 0, 0, 100, 100, 50, 0x34ff34).setOrigin(0, 0.5).setInteractive({ useHandCursor: true })
         this.circles = [
@@ -40,6 +41,8 @@ class TestScene extends Phaser.Scene {
                 delay: 1000,
                 callback: () => {
                     this.circles[i].setAlpha(0.5)
+                    Tone.Transport.stop()
+                    Tone.Transport.start()
                     if(i == 3){
                         this.synth.triggerAttackRelease("C5", "8n")
                     } else {
@@ -58,15 +61,24 @@ class TestScene extends Phaser.Scene {
 
         const graphics = this.add.graphics()
         graphics.fillStyle(0x000000, 1)
-        let tool = this.add.text(this.w*0.9, this.h*0.2, "🥁", {
-            fontSize: 100
-        }).setOrigin(0.5)
-        let toolBG = graphics.fillRoundedRect(tool.x - tool.displayWidth, tool.y - tool.displayHeight,  200,200, 32)
-        
+        // let tool = this.add.text(this.w*0.9, this.h*0.2, "🥁", {
+        //     fontSize: 100
+        // }).setOrigin(0.5)
+        // let tool2 = this.add.text(this.w*0.9, this.h*0.2, "🥁", {
+        //     fontSize: 100
+        // }).setOrigin(0.5)
+        // let toolBG = graphics.fillRoundedRect(tool.x - tool.displayWidth, tool.y - tool.displayHeight,  200,200, 32)
+        // this.toolContainer = this.add.container(tool.x, tool.y, [tool, tool2])
         // doesn't work. would if i just used a rectangle but i want to use the rounded one T_T
         //let toolSprite = this.physics.add.existing(toolBG)
         // this.input.setDraggable(toolSprite.setInteractive())
         
+    }
+    update() {
+        // this.toolContainer.children.forEach((child) => {
+        //     child.x = this.toolContainer.x
+        //     child.y = this.toolContainer.y
+        // })
     }
 }
 
