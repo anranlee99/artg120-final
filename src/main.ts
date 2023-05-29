@@ -43,7 +43,7 @@ class TestScene extends Phaser.Scene {
             this.synth.sync()
             
             Tone.Transport.stop()
-            Tone.Transport.bpm.value = 60 / (1000 / 1000);
+            Tone.Transport.bpm.value = 60;
             const seq = new Tone.Sequence((time, note) => {
                 this.synth.triggerAttackRelease(note, 0.1, time);
                 // subdivisions are given as subarrays
