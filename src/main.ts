@@ -35,12 +35,12 @@ class TestScene extends Phaser.Scene {
 
 
 
+        this.synth.unsync()
+        this.synth.sync()
         this.playBtn.on(Phaser.Input.Events.POINTER_DOWN, () => {
             this.playBtn.setAlpha(0.5)
             this.playBtn.disableInteractive()
             let i = 0;
-            this.synth.unsync()
-            this.synth.sync()
             
             Tone.Transport.stop()
             Tone.Transport.bpm.value = 60;
