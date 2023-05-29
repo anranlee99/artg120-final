@@ -33,28 +33,25 @@ class TestScene extends Phaser.Scene {
             this.add.circle(this.w * 0.4 + 300, this.h * 0.1, 10, 0xffffff).setOrigin(0.5),
         ]
 
-        Tone.Transport.stop()
-        Tone.Transport.start()
+
 
         this.playBtn.on(Phaser.Input.Events.POINTER_DOWN, () => {
             this.playBtn.setAlpha(0.5)
             this.playBtn.disableInteractive()
             let i = 0;
-            this.time.addEvent({
-                delay: 1000,
-                callback: () => {
-                    this.circles[i].setAlpha(0.5)
-
-                    this.synth.sync()
-                    if (i == 3) {
-                        this.synth.triggerAttackRelease("C5", "8n")
-                    } else {
-                        this.synth.triggerAttackRelease("C4", "8n")
-                    }
-                    i++
-                },
-                repeat: 3
-            })
+            this.synth.unsync()
+            this.synth.sync()
+            
+            Tone.Transport.stop()
+            Tone.Transport.bpm.value = 60 / (1000 / 1000);
+            const seq = new Tone.Sequence((time, note) => {
+                this.synth.triggerAttackRelease(note, 0.1, time);
+                // subdivisions are given as subarrays
+                this.circles[i].setAlpha(0.5)
+                i++
+            }, ["C4", "C4", "C4", "C5"], "4n").start(0, 0);
+            seq.loop = 1;
+            Tone.Transport.start();
         })
 
 
@@ -66,8 +63,9 @@ class TestScene extends Phaser.Scene {
         graphics.fillStyle(0x00aaff, 1)
         let iconRect = this.add.rectangle(this.w * 0.9, this.h * 0.2, 200, 200).setOrigin(0.5)
         let tool = this.add.text(iconRect.x, iconRect.y, "🥁", {
-            fontSize: 100
-        }).setOrigin(0.5)
+            fontSize: 100,
+
+        }).setOrigin(0.5).setPadding(10)
         let mask = graphics.fillRoundedRect(0, 0, 200, 200, 32)//.setDepth(iconRect.depth + 1)
         mask.copyPosition({
             x: iconRect.x - iconRect.width / 2,
