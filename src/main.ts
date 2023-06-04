@@ -1,5 +1,8 @@
 import 'phaser';
 import * as Tone from 'tone';
+import  arrow from './assets/arrow.png'
+import troll from './assets/troll.png'
+import goat from './assets/goat.png'
 
 class TestScene extends Phaser.Scene {
     synth: Tone.Synth
@@ -13,77 +16,95 @@ class TestScene extends Phaser.Scene {
 
         this.synth = new Tone.Synth().toDestination()
     }
-    makeTrack() {
-        this.add.rectangle(0, this.h * 0.2, this.w * 0.8, this.h * 0.2, 0xabcdef).setOrigin(0).setStrokeStyle(5, 0)
-        this.add.rectangle(0, this.h * 0.4, this.w * 0.8, this.h * 0.2, 0xabcdef).setOrigin(0).setStrokeStyle(5, 0)
-        this.add.rectangle(0, this.h * 0.6, this.w * 0.8, this.h * 0.2, 0xabcdef).setOrigin(0).setStrokeStyle(5, 0)
-        this.add.rectangle(0, this.h * 0.8, this.w * 0.8, this.h * 0.2, 0xabcdef).setOrigin(0).setStrokeStyle(5, 0)
+    preload(){
+        this.load.image('arrow', arrow)
+        this.load.image('troll', troll)
+        this.load.image('goat', goat)
     }
     setUp() {
         this.w = this.game.config.width as number
         this.h = this.game.config.height as number
-        this.makeTrack()
-        this.sound.on(Phaser.Sound.Events.UNLOCKED, () => Tone.start())
+       
+        this.add.rectangle(this.w/2, this.h/2, this.w, 100, 0x7f6000)
+        this.add.rectangle(0, this.h/2+50, this.w*0.1, this.h/2, 0x6aa84f).setOrigin(0)
+        this.add.rectangle(this.w*0.9, this.h/2+50, this.w*0.1, this.h/2, 0x6aa84f).setOrigin(0)
+        let river = this.add.rectangle(this.w*0.1, this.h/2+100, this.w*0.8, this.h/2, 0x0b5394).setOrigin(0)
 
-        this.playBtn = this.add.triangle(this.w * 0.3, this.h * 0.1, 0, 0, 0, 100, 100, 50, 0x34ff34).setOrigin(0, 0.5).setInteractive({ useHandCursor: true })
-        this.circles = [
-            this.add.circle(this.w * 0.4, this.h * 0.1, 10, 0xffffff).setOrigin(0.5),
-            this.add.circle(this.w * 0.4 + 100, this.h * 0.1, 10, 0xffffff).setOrigin(0.5),
-            this.add.circle(this.w * 0.4 + 200, this.h * 0.1, 10, 0xffffff).setOrigin(0.5),
-            this.add.circle(this.w * 0.4 + 300, this.h * 0.1, 10, 0xffffff).setOrigin(0.5),
-        ]
+        let aBlock = this.add.rectangle(125, this.h/2+175, 75, river.displayHeight*0.15, 0xffff00).setOrigin(0.5)
+        let sBlock = this.add.rectangle(125, this.h/2+200 + aBlock.displayHeight, 75, river.displayHeight*0.15, 0x00ff00).setOrigin(0.5)
+        let kBlock = this.add.rectangle(125, this.h/2+225 + aBlock.displayHeight*2, 75, river.displayHeight*0.15, 0xff0000).setOrigin(0.5)
+        let lBlock = this.add.rectangle(125, this.h/2+250 + aBlock.displayHeight*3, 75, river.displayHeight*0.15, 0xff9900).setOrigin(0.5)
+        this.add.image(250, this.h/2+175, 'arrow').setOrigin(0.5).setScale(0.15)
+        this.add.image(250, sBlock.y, 'arrow').setOrigin(0.5).setScale(0.15).setAngle(270)
+        this.add.image(250, kBlock.y, 'arrow').setOrigin(0.5).setScale(0.15).setAngle(90)
+        this.add.image(250, lBlock.y, 'arrow').setOrigin(0.5).setScale(0.15).setAngle(180)
 
+        this.add.text(aBlock.x, aBlock.y, 'A', {fontSize: '32px', color: '#000000', fontStyle: 'bold'}).setOrigin(0.5)
+        this.add.text(sBlock.x, sBlock.y, 'S', {fontSize: '32px', color: '#000000', fontStyle: 'bold'}).setOrigin(0.5)
+        this.add.text(kBlock.x, kBlock.y, 'K', {fontSize: '32px', color: '#000000', fontStyle: 'bold'}).setOrigin(0.5)
+        this.add.text(lBlock.x, lBlock.y, 'L', {fontSize: '32px', color: '#000000', fontStyle: 'bold'}).setOrigin(0.5)
+        this.add.image(this.w*0.8, this.h/2-25, 'goat').setOrigin(0.5,1).setScale(0.8)
+        this.add.image(this.w*0.9, this.h/2-25, 'goat').setOrigin(0.5,1).setScale(0.5)
+        this.add.image(this.w*0.95, this.h/2-25, 'goat').setOrigin(0,1).setScale(0.4)
+        let troll = this.add.image(this.w/2, this.h/2-25, 'troll').setOrigin(0.5,1)
 
-
-        this.synth.unsync()
-        this.synth.sync()
-        this.playBtn.on(Phaser.Input.Events.POINTER_DOWN, () => {
-            this.playBtn.setAlpha(0.5)
-            this.playBtn.disableInteractive()
-            let i = 0;
-            
-            Tone.Transport.stop()
-            Tone.Transport.bpm.value = 60;
-            const seq = new Tone.Sequence((time, note) => {
-                this.synth.triggerAttackRelease(note, 0.1, time);
-                // subdivisions are given as subarrays
-                this.circles[i].setAlpha(0.5)
-                i++
-            }, ["C4", "C4", "C4", "C5"], "4n").start(0, 0);
-            seq.loop = 1;
-            Tone.Transport.start();
+        this.input.keyboard.on('keydown-A', (event: KeyboardEvent) => {
+            //bold aBlock border
+            aBlock.setStrokeStyle(5, 0x000000)
+            //make the troll jump   
+            this.tweens.add({
+                targets: troll,
+                y: troll.y-100,
+                duration: 200,
+                ease: 'Power2',
+                yoyo: true,
+                onComplete: () => {
+                    //reset troll position
+                    troll.y = this.h/2-25
+                }
+            })
         })
-
-
+        this.input.keyboard.on('keyup-A', (event: KeyboardEvent) => {
+            //unbold aBlock border
+            aBlock.setStrokeStyle(0, 0x000000)
+        })
+        this.input.keyboard.on('keydown-S', (event: KeyboardEvent) => {
+            //bold sBlock border
+            sBlock.setStrokeStyle(5, 0x000000)
+            troll.setScale(0.5, 1)
+        })
+        this.input.keyboard.on('keyup-S', (event: KeyboardEvent) => {
+            //unbold sBlock border
+            sBlock.setStrokeStyle(0, 0x000000)
+            troll.setScale(1)
+        })
+        this.input.keyboard.on('keydown-K', (event: KeyboardEvent) => {
+            //bold kBlock border
+            kBlock.setStrokeStyle(5, 0x000000)
+            troll.setScale(0.5, 1)
+            troll.flipX = true
+        })
+        this.input.keyboard.on('keyup-K', (event: KeyboardEvent) => {
+            //unbold kBlock border
+            kBlock.setStrokeStyle(0, 0x000000)
+            troll.setScale(1)
+            troll.flipX = false
+        })
+        this.input.keyboard.on('keydown-L', (event: KeyboardEvent) => {
+            //bold lBlock border
+            lBlock.setStrokeStyle(5, 0x000000)
+            troll.setScale(1, 0.5)
+        })
+        this.input.keyboard.on('keyup-L', (event: KeyboardEvent) => {
+            //unbold lBlock border
+            lBlock.setStrokeStyle(0, 0x000000)
+            troll.setScale(1)
+        })
     }
     create() {
         this.setUp()
 
-        const graphics = this.add.graphics()
-        graphics.fillStyle(0x00aaff, 1)
-        let iconRect = this.add.rectangle(this.w * 0.9, this.h * 0.2, 200, 200).setOrigin(0.5)
-        let tool = this.add.text(iconRect.x, iconRect.y, "🥁", {
-            fontSize: 100,
-
-        }).setOrigin(0.5).setPadding(10)
-        let mask = graphics.fillRoundedRect(0, 0, 200, 200, 32)//.setDepth(iconRect.depth + 1)
-        mask.copyPosition({
-            x: iconRect.x - iconRect.width / 2,
-            y: iconRect.y - iconRect.height / 2
-        })
-        iconRect.createGeometryMask(mask)
-        iconRect.setInteractive({ useHandCursor: true, draggable: true })
-        iconRect.on(Phaser.Input.Events.DRAG, (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
-
-            iconRect.x = dragX
-            iconRect.y = dragY
-            tool.x = dragX
-            tool.y = dragY
-            mask.copyPosition({
-                x: iconRect.x - iconRect.width / 2,
-                y: iconRect.y - iconRect.height / 2
-            })
-        })
+        
     }
     update() {
     }
@@ -97,7 +118,7 @@ let game = new Phaser.Game({
         width: 1920,
         height: 1080
     },
-    backgroundColor: '#cccccc',
+    backgroundColor: '#9fc5e8',
     parent: 'app',
     title: "ARTG120 Final",
     scene: [TestScene]
