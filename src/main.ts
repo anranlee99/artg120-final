@@ -48,7 +48,7 @@ class TestScene extends Phaser.Scene {
         this.add.image(this.w*0.95, this.h/2-25, 'goat').setOrigin(0,1).setScale(0.4)
         let troll = this.add.image(this.w/2, this.h/2-25, 'troll').setOrigin(0.5,1)
 
-        this.input.keyboard.on('keydown-A', (event: KeyboardEvent) => {
+        this.input.keyboard?.on('keydown-A', () => {
             //bold aBlock border
             aBlock.setStrokeStyle(5, 0x000000)
             //make the troll jump   
@@ -64,38 +64,38 @@ class TestScene extends Phaser.Scene {
                 }
             })
         })
-        this.input.keyboard.on('keyup-A', (event: KeyboardEvent) => {
+        this.input.keyboard?.on('keyup-A', () => {
             //unbold aBlock border
             aBlock.setStrokeStyle(0, 0x000000)
         })
-        this.input.keyboard.on('keydown-S', (event: KeyboardEvent) => {
+        this.input.keyboard?.on('keydown-S', () => {
             //bold sBlock border
             sBlock.setStrokeStyle(5, 0x000000)
             troll.setScale(0.5, 1)
         })
-        this.input.keyboard.on('keyup-S', (event: KeyboardEvent) => {
+        this.input.keyboard?.on('keyup-S', () => {
             //unbold sBlock border
             sBlock.setStrokeStyle(0, 0x000000)
             troll.setScale(1)
         })
-        this.input.keyboard.on('keydown-K', (event: KeyboardEvent) => {
+        this.input.keyboard?.on('keydown-K', () => {
             //bold kBlock border
             kBlock.setStrokeStyle(5, 0x000000)
             troll.setScale(0.5, 1)
             troll.flipX = true
         })
-        this.input.keyboard.on('keyup-K', (event: KeyboardEvent) => {
+        this.input.keyboard?.on('keyup-K', () => {
             //unbold kBlock border
             kBlock.setStrokeStyle(0, 0x000000)
             troll.setScale(1)
             troll.flipX = false
         })
-        this.input.keyboard.on('keydown-L', (event: KeyboardEvent) => {
+        this.input.keyboard?.on('keydown-L', () => {
             //bold lBlock border
             lBlock.setStrokeStyle(5, 0x000000)
             troll.setScale(1, 0.5)
         })
-        this.input.keyboard.on('keyup-L', (event: KeyboardEvent) => {
+        this.input.keyboard?.on('keyup-L', () => {
             //unbold lBlock border
             lBlock.setStrokeStyle(0, 0x000000)
             troll.setScale(1)
