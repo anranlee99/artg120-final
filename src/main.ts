@@ -100,6 +100,7 @@ class TestScene extends Phaser.Scene {
             lBlock.setStrokeStyle(0, 0x000000)
             troll.setScale(1)
         })
+        
     }
     create() {
         this.setUp()
