@@ -14,7 +14,7 @@ export type Qua = {
     BackgroundFile: string,
     MapId: string,
     Mode: string,
-    Tiitle: string,
+    Title: string,
     Artist: string,
     Source: string,
     Tags: string[],

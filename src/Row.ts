@@ -24,6 +24,6 @@ export class Row extends Phaser.GameObjects.Container {
                 break;
             }
         }
-        return score
+        return Math.round(score/1000)
     }
 }
