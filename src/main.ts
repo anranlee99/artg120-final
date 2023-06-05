@@ -1,5 +1,4 @@
 import 'phaser';
-import * as Tone from 'tone';
 import  arrow from './assets/arrow.png'
 import troll from './assets/troll.png'
 import goat from './assets/goat.png'
@@ -7,7 +6,6 @@ import  selectsound from './assets/selectsound.mp3'
 import bgsound from './assets/waterambience.mp3'
 
 class Game extends Phaser.Scene {
-    synth: Tone.Synth
     w!: number
     h!: number
     playBtn!: Phaser.GameObjects.Triangle
@@ -15,8 +13,6 @@ class Game extends Phaser.Scene {
     // gaming
     constructor() {
         super('Game');
-
-        this.synth = new Tone.Synth().toDestination()
     }
     preload(){
         this.load.image('arrow', arrow)
