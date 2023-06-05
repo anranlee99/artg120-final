@@ -1,9 +1,14 @@
 name: Deploy
 
-on: push
+on:
+  push:
+    branches:
+      - main
+
 env:
   ITCH_USERNAME: alee208
   ITCH_GAME_ID: dancing-troll
+
 jobs:
   deploy:
     name: Upload to Itch
@@ -14,18 +19,17 @@ jobs:
         channel:
           - windows
           - webgl
-    runs-on: ubuntu-latest
-    name: Deploy - Itch.io ${{ matrix.template }}
     steps:
+      - uses: actions/checkout@v2
       - uses: actions/download-artifact@v2.0.8
         with:
           name: ${{ matrix.channel }}
           path: build/${{ matrix.channel }}
       - uses: KikimoraGames/itch-publish@v0.0.3
         with:
-          butlerApiKey: ${{secrets.BUTLER_API_KEY}}
-          gameData: ./build/${{ matrix.template }}
-          itchUsername: ${{env.ITCH_USERNAME}}
+          butlerApiKey: ${{ secrets.BUTLER_API_KEY }}
+          gameData: ./build/${{ matrix.channel }}
+          itchUsername: ${{ env.ITCH_USERNAME }}
           itchGameId: ${{ env.ITCH_GAME_ID }}
           buildChannel: ${{ matrix.channel }}
           buildNumber: ${{ needs.version.outputs.version_hash }}
