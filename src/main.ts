@@ -3,6 +3,8 @@ import * as Tone from 'tone';
 import  arrow from './assets/arrow.png'
 import troll from './assets/troll.png'
 import goat from './assets/goat.png'
+import  selectsound from './assets/selectsound.mp3'
+import bgsound from './assets/waterambience.mp3'
 
 class Game extends Phaser.Scene {
     synth: Tone.Synth
@@ -130,11 +132,18 @@ class Menu extends Phaser.Scene {
     preload(){
         this.load.image('troll', troll)
         this.load.image('goat', goat)
+        this.load.audio('selectsound', selectsound)
+        this.load.audio('bgsound', bgsound)
     }
     setUp() {
         this.w = this.game.config.width as number
         this.h = this.game.config.height as number
-       
+        
+        this.sound.play('bgsound', {
+            loop: true,
+            volume: 0.5
+        
+        })
         this.add.rectangle(this.w/2, this.h/2, this.w, 100, 0x7f6000)
         this.add.rectangle(0, this.h/2+50, this.w*0.1, this.h/2, 0x6aa84f).setOrigin(0)
         this.add.rectangle(this.w*0.9, this.h/2+50, this.w*0.1, this.h/2, 0x6aa84f).setOrigin(0)
@@ -152,12 +161,14 @@ class Menu extends Phaser.Scene {
         this.add.text(beginBtn.x, beginBtn.y, 'Begin', {fontSize: '40px', color: '#000000', fontStyle: 'bold'}).setOrigin(0.5)
         beginBtn.setInteractive({useHandCursor: true})
         beginBtn.on('pointerdown', () => {
+            this.sound.play('selectsound')
             this.scene.start('Game')
         })
         let controlsBtn = this.add.rectangle(this.w/2, this.h*0.9, this.w*0.1, 100, 0x6aa84f)
         controlsBtn.setInteractive({useHandCursor: true})
         this.add.text(controlsBtn.x, controlsBtn.y, 'Controls', {fontSize: '40px', color: '#000000', fontStyle: 'bold'}).setOrigin(0.5)
         controlsBtn.on('pointerdown', () => {
+            this.sound.play('selectsound')
             this.scene.start('Controls')
         })
     }
