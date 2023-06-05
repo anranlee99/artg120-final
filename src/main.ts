@@ -1,9 +1,12 @@
 import 'phaser';
-import  arrow from './assets/arrow.png'
+import YAML from 'yaml';
+import arrow from './assets/arrow.png'
 import troll from './assets/troll.png'
 import goat from './assets/goat.png'
-import  selectsound from './assets/selectsound.mp3'
+import selectsound from './assets/selectsound.mp3'
 import bgsound from './assets/waterambience.mp3'
+import youQua from './assets/you.qua?url'
+import drTimeQua from './assets/dr_time.qua?url'
 
 class Game extends Phaser.Scene {
     w!: number
@@ -130,6 +133,9 @@ class Menu extends Phaser.Scene {
         this.load.image('goat', goat)
         this.load.audio('selectsound', selectsound)
         this.load.audio('bgsound', bgsound)
+
+        this.load.yaml('you_qua', youQua)
+        this.load.yaml('dr_time_qua', drTimeQua)
     }
     setUp() {
         this.w = this.game.config.width as number
@@ -222,8 +228,45 @@ Press any key to begin`
     update() {
     }
 }
+
+class YamlFile extends Phaser.Loader.File {
+    constructor(loader: Phaser.Loader.LoaderPlugin, key: string, url: string) {
+        super(loader, { type: 'yaml', key, url });
+        this.cache = this.loader.cacheManager.addCustom('yaml');
+    }
+
+    onProcess() {
+        if (this.state !== Phaser.Loader.FILE_POPULATED) {
+            this.state = Phaser.Loader.FILE_PROCESSING;
+
+            this.data = YAML.parse(this.xhrLoader!.responseText)
+        }
+
+        this.onProcessComplete();
+    }
+}
+
+class YamlFilePlugin extends Phaser.Plugins.BasePlugin {
+    constructor(pluginManager: Phaser.Plugins.PluginManager) {
+        super(pluginManager);
+
+        pluginManager.registerFileType('yaml', this.yamlFileCallback)
+    }
+
+    yamlFileCallback(key: string, url: string) {
+        // @ts-ignore
+        this.addFile(new YamlFile(this, key, url))
+        return this
+    }
+}
+
 let game = new Phaser.Game({
     type: Phaser.WEBGL,
+    plugins: {
+        global: [
+            { key: 'YamlFilePlugin', plugin: YamlFilePlugin, start: true },
+        ]
+    },
     scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
