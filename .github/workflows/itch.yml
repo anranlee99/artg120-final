@@ -30,10 +30,10 @@ jobs:
       #     name: game-artifacts
       #     path: path/to/artifacts
 
-      - name: Download Artifacts
-        uses: actions/download-artifact@v2.1.4
-        with:
-          name: game-artifacts
+      # - name: Download Artifacts
+      #   uses: actions/download-artifact@v2.1.4
+      #   with:
+      #     name: game-artifacts
       - name: Publish to itch.io
         uses: KikimoraGames/itch-publish@v0.0.3
         with:
