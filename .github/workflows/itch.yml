@@ -24,17 +24,6 @@ jobs:
       - name: Build
         run: pnpm run build
 
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: game-artifacts
-          path: './dist'
-
-      - name: Download Artifacts
-        uses: actions/download-artifact@v2.0.8
-        with:
-          name: game-artifacts
-          path: './dist'
       - name: Publish to itch.io
         uses: KikimoraGames/itch-publish@v0.0.3
         with:
