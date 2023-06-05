@@ -138,7 +138,7 @@ class Menu extends Phaser.Scene {
         this.add.rectangle(this.w/2, this.h/2, this.w, 100, 0x7f6000)
         this.add.rectangle(0, this.h/2+50, this.w*0.1, this.h/2, 0x6aa84f).setOrigin(0)
         this.add.rectangle(this.w*0.9, this.h/2+50, this.w*0.1, this.h/2, 0x6aa84f).setOrigin(0)
-        let river = this.add.rectangle(this.w*0.1, this.h/2+100, this.w*0.8, this.h/2, 0x0b5394).setOrigin(0)
+        this.add.rectangle(this.w*0.1, this.h/2+100, this.w*0.8, this.h/2, 0x0b5394).setOrigin(0)
         let banner = this.add.rectangle(this.w/2, this.h*0.2, this.w*0.6, 200, 0xbf9000)
         this.add.text(banner.x, banner.y, 'He is a dancer, and this is his bridge.', 
         {fontSize: '40px', color: '#000000', fontStyle: 'bold'}).setOrigin(0.5)
@@ -146,7 +146,7 @@ class Menu extends Phaser.Scene {
         // this.add.image(this.w*0.8, this.h/2-25, 'goat').setOrigin(0.5,1).setScale(0.8)
         // this.add.image(this.w*0.9, this.h/2-25, 'goat').setOrigin(0.5,1).setScale(0.5)
         // this.add.image(this.w*0.95, this.h/2-25, 'goat').setOrigin(0,1).setScale(0.4)
-        let troll = this.add.image(this.w/2, this.h/2-25, 'troll').setOrigin(0.5,1)
+        this.add.image(this.w/2, this.h/2-25, 'troll').setOrigin(0.5,1)
 
         let beginBtn = this.add.rectangle(this.w/2, this.h*0.7, this.w*0.1, 100, 0x6aa84f)
         this.add.text(beginBtn.x, beginBtn.y, 'Begin', {fontSize: '40px', color: '#000000', fontStyle: 'bold'}).setOrigin(0.5)
