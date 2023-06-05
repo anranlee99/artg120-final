@@ -162,6 +162,7 @@ class Menu extends Phaser.Scene {
         beginBtn.setInteractive({useHandCursor: true})
         beginBtn.on('pointerdown', () => {
             this.sound.play('selectsound')
+            this.sound.stopByKey('bgsound')
             this.scene.start('Game')
         })
         let controlsBtn = this.add.rectangle(this.w/2, this.h*0.9, this.w*0.1, 100, 0x6aa84f)
@@ -169,6 +170,7 @@ class Menu extends Phaser.Scene {
         this.add.text(controlsBtn.x, controlsBtn.y, 'Controls', {fontSize: '40px', color: '#000000', fontStyle: 'bold'}).setOrigin(0.5)
         controlsBtn.on('pointerdown', () => {
             this.sound.play('selectsound')
+            this.sound.stopByKey('bgsound')
             this.scene.start('Controls')
         })
     }
