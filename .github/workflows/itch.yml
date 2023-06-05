@@ -24,11 +24,21 @@ jobs:
       - name: Build
         run: pnpm run build
 
+      # - name: Upload Artifacts
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: game-artifacts
+      #     path: path/to/artifacts
+
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2.1.4
+        with:
+          name: game-artifacts
       - name: Publish to itch.io
         uses: KikimoraGames/itch-publish@v0.0.3
         with:
           butlerApiKey: ${{ secrets.BUTLER_API_KEY }}
-          gameData: ./dist
+          gameData: './dist'
           itchUsername: alee208
           itchGameId: dancing-troll
           buildChannel: webgl
