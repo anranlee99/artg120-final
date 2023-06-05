@@ -4,7 +4,7 @@ import  arrow from './assets/arrow.png'
 import troll from './assets/troll.png'
 import goat from './assets/goat.png'
 
-class TestScene extends Phaser.Scene {
+class Game extends Phaser.Scene {
     synth: Tone.Synth
     w!: number
     h!: number
@@ -12,7 +12,7 @@ class TestScene extends Phaser.Scene {
     circles!: Phaser.GameObjects.Arc[]
     // gaming
     constructor() {
-        super('test');
+        super('Game');
 
         this.synth = new Tone.Synth().toDestination()
     }
@@ -43,9 +43,20 @@ class TestScene extends Phaser.Scene {
         this.add.text(sBlock.x, sBlock.y, 'S', {fontSize: '32px', color: '#000000', fontStyle: 'bold'}).setOrigin(0.5)
         this.add.text(kBlock.x, kBlock.y, 'K', {fontSize: '32px', color: '#000000', fontStyle: 'bold'}).setOrigin(0.5)
         this.add.text(lBlock.x, lBlock.y, 'L', {fontSize: '32px', color: '#000000', fontStyle: 'bold'}).setOrigin(0.5)
-        this.add.image(this.w*0.8, this.h/2-25, 'goat').setOrigin(0.5,1).setScale(0.8)
-        this.add.image(this.w*0.9, this.h/2-25, 'goat').setOrigin(0.5,1).setScale(0.5)
-        this.add.image(this.w*0.95, this.h/2-25, 'goat').setOrigin(0,1).setScale(0.4)
+        let goats = [
+            this.add.image(this.w*0.8, this.h/2-25, 'goat').setOrigin(0.5,1).setScale(0.8),
+             this.add.image(this.w*0.9, this.h/2-25, 'goat').setOrigin(0.5,1).setScale(0.5),
+            this.add.image(this.w*0.95, this.h/2-25, 'goat').setOrigin(0,1).setScale(0.4),
+        ]
+        goats.forEach(goat => {
+            //add tween to move goats across the screen
+            this.tweens.add({
+                targets: goat,
+                x: {from: this.w, to: goat.x},
+                duration: 2000,
+                ease: 'Linear',
+                })
+        })
         let troll = this.add.image(this.w/2, this.h/2-25, 'troll').setOrigin(0.5,1)
 
         this.input.keyboard?.on('keydown-A', () => {
@@ -110,7 +121,98 @@ class TestScene extends Phaser.Scene {
     update() {
     }
 }
+class Menu extends Phaser.Scene {
+    w!: number
+    h!: number
+    constructor() {
+        super('Menu')
+    }
+    preload(){
+        this.load.image('troll', troll)
+        this.load.image('goat', goat)
+    }
+    setUp() {
+        this.w = this.game.config.width as number
+        this.h = this.game.config.height as number
+       
+        this.add.rectangle(this.w/2, this.h/2, this.w, 100, 0x7f6000)
+        this.add.rectangle(0, this.h/2+50, this.w*0.1, this.h/2, 0x6aa84f).setOrigin(0)
+        this.add.rectangle(this.w*0.9, this.h/2+50, this.w*0.1, this.h/2, 0x6aa84f).setOrigin(0)
+        let river = this.add.rectangle(this.w*0.1, this.h/2+100, this.w*0.8, this.h/2, 0x0b5394).setOrigin(0)
+        let banner = this.add.rectangle(this.w/2, this.h*0.2, this.w*0.6, 200, 0xbf9000)
+        this.add.text(banner.x, banner.y, 'He is a dancer, and this is his bridge.', 
+        {fontSize: '40px', color: '#000000', fontStyle: 'bold'}).setOrigin(0.5)
 
+        // this.add.image(this.w*0.8, this.h/2-25, 'goat').setOrigin(0.5,1).setScale(0.8)
+        // this.add.image(this.w*0.9, this.h/2-25, 'goat').setOrigin(0.5,1).setScale(0.5)
+        // this.add.image(this.w*0.95, this.h/2-25, 'goat').setOrigin(0,1).setScale(0.4)
+        let troll = this.add.image(this.w/2, this.h/2-25, 'troll').setOrigin(0.5,1)
+
+        let beginBtn = this.add.rectangle(this.w/2, this.h*0.7, this.w*0.1, 100, 0x6aa84f)
+        this.add.text(beginBtn.x, beginBtn.y, 'Begin', {fontSize: '40px', color: '#000000', fontStyle: 'bold'}).setOrigin(0.5)
+        beginBtn.setInteractive({useHandCursor: true})
+        beginBtn.on('pointerdown', () => {
+            this.scene.start('Game')
+        })
+        let controlsBtn = this.add.rectangle(this.w/2, this.h*0.9, this.w*0.1, 100, 0x6aa84f)
+        controlsBtn.setInteractive({useHandCursor: true})
+        this.add.text(controlsBtn.x, controlsBtn.y, 'Controls', {fontSize: '40px', color: '#000000', fontStyle: 'bold'}).setOrigin(0.5)
+        controlsBtn.on('pointerdown', () => {
+            this.scene.start('Controls')
+        })
+    }
+    create() {
+        this.setUp()
+
+        
+    }
+    update() {
+    }
+}
+class Controls extends Phaser.Scene {
+    w!: number
+    h!: number
+    constructor() {
+        super('Controls')
+    }
+    create() {
+        this.w = this.game.config.width as number
+        this.h = this.game.config.height as number
+        let str = `The three billy goats gruff want to pass your bridge, so you’ll just have to intimidate them into doing otherwise…through dance!
+
+
+
+Controls:
+
+Up Arrow: A
+
+Left Arrow: S
+
+Right Arrow: K
+
+Down Arrow: L
+
+Press any key to begin`
+        
+        this.add.text(this.w/2, this.h/2, str, {
+            fontSize: '40px',
+             color: '#000000',
+              fontStyle: 'bold', 
+                align: 'center',
+                wordWrap: {width: this.w*0.8, useAdvancedWrap: true}
+            }).setOrigin(0.5)
+        //on any input or keypress, start the game
+        this.input.on('pointerdown', () => {
+            this.scene.start('Game')
+        })
+        this.input.keyboard?.on('keydown', () => {
+            this.scene.start('Game')
+        })
+
+    }
+    update() {
+    }
+}
 let game = new Phaser.Game({
     type: Phaser.WEBGL,
     scale: {
@@ -122,7 +224,7 @@ let game = new Phaser.Game({
     backgroundColor: '#9fc5e8',
     parent: 'app',
     title: "ARTG120 Final",
-    scene: [TestScene]
+    scene: [Menu, Controls, Game]
 })
 
 declare global {
