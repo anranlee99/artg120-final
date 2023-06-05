@@ -307,7 +307,7 @@ Right Arrow: K
 
 Down Arrow: L
 
-Press any key to begin`
+Press any key to return`
         
         this.add.text(this.w/2, this.h/2, str, {
             fontSize: '40px',
@@ -318,10 +318,10 @@ Press any key to begin`
             }).setOrigin(0.5)
         //on any input or keypress, start the game
         this.input.on('pointerdown', () => {
-            this.scene.start('Game')
+            this.scene.start('Menu')
         })
         this.input.keyboard?.on('keydown', () => {
-            this.scene.start('Game')
+            this.scene.start('Menu')
         })
 
     }
