@@ -7,6 +7,7 @@ export type HitObject = {
     StartTime: number,
     Lane: number,
     KeySounds: string[], //any?
+    EndTime: number,
 }
 export type Qua = {
     AudioFile: string,

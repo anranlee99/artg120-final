@@ -2,7 +2,7 @@ import {Qua, HitObject} from "./qua-type.ts";
 
 export class Row extends Phaser.GameObjects.Container {
     HitObjects: HitObject[]
-    static MISS_TIME = -100 //tweak this
+    static MISS_TIME = -500 //tweak this
 
     //will get all the HitObjects from the qua of this lane
     constructor(scene: Phaser.Scene, index: number, HitObjects: Qua["HitObjects"]) {
@@ -11,19 +11,17 @@ export class Row extends Phaser.GameObjects.Container {
     }
 
     //fired on keypress
-    hit(currTime: number){
-        //get the closest HitObject
+    hit(currTime: number) {
         let score = 0;
-        while(true) {
-            //get rid of the ones we missed?
-            if(this.HitObjects[0].StartTime < currTime + Row.MISS_TIME) {
-                this.HitObjects.shift()
-            } else {
-                score = Math.abs(this.HitObjects[0].StartTime - currTime)
-                this.HitObjects.shift()
-                break;
-            }
+        while(this.HitObjects[0].StartTime < currTime + Row.MISS_TIME) {
+            //remove misses 
+            this.HitObjects.shift()
         }
-        return Math.round(score/1000)
-    }
+        if(currTime >= this.HitObjects[0].StartTime  && currTime < this.HitObjects[0].StartTime + 500) {
+            this.HitObjects.shift()
+            score = this.HitObjects[0].StartTime + 500 - currTime
+        }
+        return Math.round(score / 1000);
+      }
+      
 }

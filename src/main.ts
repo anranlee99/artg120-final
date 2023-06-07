@@ -50,9 +50,9 @@ class Game extends Phaser.Scene {
             new Row(this, 3, this.qua.HitObjects),
             new Row(this, 4, this.qua.HitObjects),
         ]
+        console.log(this.rows)
         this.rows.forEach((row: Row, i: number) => {
             row.HitObjects.forEach((HitObject: HitObject) => {
-                console.log(HitObject)
                 let mark: Phaser.GameObjects.Image | undefined;
                 switch(i){
                     case 0:
@@ -125,7 +125,7 @@ class Game extends Phaser.Scene {
         let troll = this.add.image(this.w/2, this.h/2-25, 'troll').setOrigin(0.5,1)
 
         this.input.keyboard?.on('keydown-A', () => {
-            this.score += this.rows[0].hit(this.time.now)
+            this.score += this.rows[0].hit(this.time.now - this.startTime)
             this.scoreText.text = 'Score: ' + this.score
             //bold aBlock border
             this.aBlock.setStrokeStyle(5, 0x000000)
@@ -147,7 +147,7 @@ class Game extends Phaser.Scene {
             this.aBlock.setStrokeStyle(0, 0x000000)
         })
         this.input.keyboard?.on('keydown-S', () => {
-            this.score += this.rows[1].hit(this.time.now)
+            this.score += this.rows[1].hit(this.time.now - this.startTime)
             this.scoreText.text = 'Score: ' + this.score
             //bold sBlock border
             this.sBlock.setStrokeStyle(5, 0x000000)
@@ -159,7 +159,7 @@ class Game extends Phaser.Scene {
             troll.setScale(1)
         })
         this.input.keyboard?.on('keydown-K', () => {
-            this.score += this.rows[2].hit(this.time.now)
+            this.score += this.rows[2].hit(this.time.now -this.startTime)
             this.scoreText.text = 'Score: ' + this.score
             //bold kBlock border
             this.kBlock.setStrokeStyle(5, 0x000000)
@@ -173,7 +173,7 @@ class Game extends Phaser.Scene {
             troll.flipX = false
         })
         this.input.keyboard?.on('keydown-L', () => {
-            this.score += this.rows[3].hit(this.time.now)
+            this.score += this.rows[3].hit(this.time.now - this.startTime)
             this.scoreText.text = 'Score: ' + this.score
             //bold lBlock border
             this.lBlock.setStrokeStyle(5, 0x000000)
